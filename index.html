@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment and Continuous Improvement at MVCC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            padding: 40px 20px;
+            color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+        
+        .cycle-container {
+            position: relative;
+            width: 700px;
+            height: 700px;
+            margin: 0 auto 60px;
+        }
+        
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #5B4FFF 0%, #9D3FFF 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3em;
+            font-weight: 300;
+            text-align: center;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(91, 79, 255, 0.4);
+        }
+        
+        .process-node {
+            position: absolute;
+            width: 180px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .process-node:hover {
+            transform: scale(1.05);
+        }
+        
+        .process-node h3 {
+            font-size: 0.85em;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .process-node p {
+            font-size: 0.9em;
+            line-height: 1.4;
+            color: #555;
+            font-weight: 300;
+        }
+        
+        .node1 {
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-color: #FF00E5;
+        }
+        
+        .node1 h3 { color: #FF00E5; }
+        
+        .node2 {
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            border-color: #0099FF;
+        }
+        
+        .node2 h3 { color: #0099FF; }
+        
+        .node3 {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-color: #00FF66;
+        }
+        
+        .node3 h3 { color: #00FF66; }
+        
+        .node4 {
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            border-color: #FF0066;
+        }
+        
+        .node4 h3 { color: #FF0066; }
+        
+        .arrow {
+            position: absolute;
+            font-size: 2.5em;
+            color: #ddd;
+        }
+        
+        .arrow1 {
+            top: 150px;
+            right: 170px;
+            transform: rotate(45deg);
+        }
+        
+        .arrow2 {
+            bottom: 150px;
+            right: 170px;
+            transform: rotate(135deg);
+        }
+        
+        .arrow3 {
+            bottom: 150px;
+            left: 170px;
+            transform: rotate(225deg);
+        }
+        
+        .arrow4 {
+            top: 150px;
+            left: 170px;
+            transform: rotate(315deg);
+        }
+        
+        .gap-section {
+            background: linear-gradient(135deg, #FF1744 0%, #E91E63 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 60px auto;
+            max-width: 800px;
+            color: white;
+            box-shadow: 0 10px 40px rgba(255, 23, 68, 0.4);
+        }
+        
+        .gap-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 300;
+            text-align: center;
+        }
+        
+        .gap-content {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 10px;
+            font-size: 1.05em;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        
+        .solutions-section {
+            margin: 60px auto;
+            max-width: 900px;
+        }
+        
+        .solutions-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 300;
+            color: #2c3e50;
+        }
+        
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .solution-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            border-top: 5px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .solution-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .solution-card.sol1 {
+            border-color: #00C6FF;
+        }
+        
+        .solution-card.sol2 {
+            border-color: #FFB300;
+        }
+        
+        .solution-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+        
+        .solution-card.sol1 h3 { color: #00C6FF; }
+        .solution-card.sol2 h3 { color: #FFB300; }
+        
+        .solution-card p {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #555;
+            font-weight: 300;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+            .process-node:hover,
+            .solution-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Assessment and Continuous Improvement at MVCC</h1>
+        <p class="subtitle">Current Process Cycle</p>
+        
+        <div class="cycle-container">
+            <div class="center-circle">
+                Continuous<br>Improvement<br>Cycle
+            </div>
+            
+            <div class="arrow arrow1">→</div>
+            <div class="arrow arrow2">→</div>
+            <div class="arrow arrow3">→</div>
+            <div class="arrow arrow4">→</div>
+            
+            <div class="process-node node1">
+                <h3>Goal Setting</h3>
+                <p>Departments set annual goals attached to budget requests</p>
+            </div>
+            
+            <div class="process-node node2">
+                <h3>Assessment</h3>
+                <p>POARs collected annually across programs, schools, and departments</p>
+            </div>
+            
+            <div class="process-node node3">
+                <h3>Program Review</h3>
+                <p>APRs completed for each academic program on a 3-year cycle</p>
+            </div>
+            
+            <div class="process-node node4">
+                <h3>Reporting</h3>
+                <p>President reports on KPIs measuring mission and strategic goal success</p>
+            </div>
+        </div>
+        
+        <div class="gap-section">
+            <h2>⚠ Identified Gap</h2>
+            <div class="gap-content">
+                While assessment procedures and documentation are acceptable and sustainable, 
+                <strong>gaps exist in moving from assessment results to continued improvement</strong>. 
+                The college should focus more on actions taken based on assessment results.
+            </div>
+        </div>
+        
+        <div class="solutions-section">
+            <h2>💡 Suggested Improvements</h2>
+            <div class="solutions-grid">
+                <div class="solution-card sol1">
+                    <h3>Increase Transparency</h3>
+                    <p>Make POARs and APRs available to more members of the college community. 
+                    Currently housed in Watermark platform and accessible by very few employees.</p>
+                </div>
+                
+                <div class="solution-card sol2">
+                    <h3>Formalize Action Planning</h3>
+                    <p>Create a process and associated templates for following up on assessment results. 
+                    Provide tools to help departments and Deans plan improvements.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
